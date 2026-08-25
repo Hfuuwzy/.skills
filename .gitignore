@@ -1,5 +1,6 @@
 .codegraph/
 __pycache__/
 *.py[cod]
+.coverage
 .DS_Store
 Thumbs.db
