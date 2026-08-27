@@ -1,0 +1,7 @@
+{
+  "skills": {
+    "hybrid-search-implementation": "https://github.com/wshobson/agents/tree/main/plugins/llm-application-dev/skills/hybrid-search-implementation",
+    "image-enhancer": "https://github.com/ComposioHQ/awesome-claude-skills/tree/master/image-enhancer",
+    "prompt-lookup": "https://github.com/f/prompts.chat/tree/main/plugins/claude/prompts.chat/skills/prompt-lookup"
+  }
+}

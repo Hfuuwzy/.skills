@@ -1,0 +1,8 @@
+{
+  "skills": {
+    "canvas-design": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
+    "html-ppt-retro-quarterly-review": "https://github.com/nexu-io/open-design/tree/main/skills/html-ppt-retro-quarterly-review",
+    "imagegen-frontend-mobile": "https://github.com/Leonxlnx/taste-skill/tree/main/skills/imagegen-frontend-mobile",
+    "imagegen-frontend-web": "https://github.com/Leonxlnx/taste-skill/tree/main/skills/imagegen-frontend-web"
+  }
+}

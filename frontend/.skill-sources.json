@@ -1,0 +1,8 @@
+{
+  "skills": {
+    "image-to-code-skill": "https://github.com/Leonxlnx/taste-skill/tree/main/skills/image-to-code-skill",
+    "ink": "https://github.com/google-labs-code/design.md/tree/main/.agents/skills/ink",
+    "make-interfaces-feel-better": "https://github.com/jakubkrehel/make-interfaces-feel-better/tree/main/skills/make-interfaces-feel-better",
+    "web-artifacts-builder": "https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder"
+  }
+}

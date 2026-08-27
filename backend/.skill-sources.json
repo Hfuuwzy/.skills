@@ -1,0 +1,6 @@
+{
+  "skills": {
+    "pytorch-patterns": "https://github.com/affaan-m/ECC/tree/main/docs/zh-CN/skills/pytorch-patterns",
+    "typed-service-contracts": "https://github.com/google-labs-code/design.md/tree/main/.agents/skills/typed-service-contracts"
+  }
+}

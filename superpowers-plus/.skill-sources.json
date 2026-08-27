@@ -1,0 +1,23 @@
+{
+  "skills": {
+    "acceptance-testing": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/acceptance-testing",
+    "bootstrapping-repository-memory": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/bootstrapping-repository-memory",
+    "brainstorming": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/brainstorming",
+    "curating-repository-memory": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/curating-repository-memory",
+    "dispatching-parallel-agents": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/dispatching-parallel-agents",
+    "distilling-lessons": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/distilling-lessons",
+    "executing-plans": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/executing-plans",
+    "finishing-a-development-branch": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/finishing-a-development-branch",
+    "receiving-code-review": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/receiving-code-review",
+    "requesting-code-review": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/requesting-code-review",
+    "subagent-driven-development": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/subagent-driven-development",
+    "systematic-debugging": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/systematic-debugging",
+    "test-driven-development": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/test-driven-development",
+    "using-git-worktrees": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/using-git-worktrees",
+    "using-superpowers": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/using-superpowers",
+    "verification-before-completion": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/verification-before-completion",
+    "writing-acceptance-criteria": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/writing-acceptance-criteria",
+    "writing-plans": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/writing-plans",
+    "writing-skills": "https://github.com/xhyqaq/superpowers-plus/tree/main/skills/writing-skills"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "skills": {
+    "openspec-apply-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-apply-change",
+    "openspec-archive-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-archive-change",
+    "openspec-bulk-archive-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-bulk-archive-change",
+    "openspec-continue-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-continue-change",
+    "openspec-explore": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-explore",
+    "openspec-ff-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-ff-change",
+    "openspec-new-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-new-change",
+    "openspec-onboard": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-onboard",
+    "openspec-propose": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-propose",
+    "openspec-sync-specs": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-sync-specs",
+    "openspec-update-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-update-change",
+    "openspec-verify-change": "https://github.com/Fission-AI/OpenSpec/tree/main/skills/openspec-verify-change"
+  }
+}
