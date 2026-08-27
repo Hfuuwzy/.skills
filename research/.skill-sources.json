@@ -1,0 +1,12 @@
+{
+    "skills":  {
+                   "citation-management":  "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/citation-management",
+                   "deep-reading-analyst":  "https://github.com/MaxMiksa/Auto-Company/tree/main/.claude/skills/deep-reading-analyst",
+                   "evaluating-paper-relevance":  "https://github.com/brycewang-stanford/Auto-Empirical-Research-Skills/tree/main/skills/05-kthorn-research-superpower/research/evaluating-paper-relevance",
+                   "literature-review":  "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/literature-review",
+                   "paper2code":  "https://github.com/PrathamLearnsToCode/paper2code/tree/main/skills/paper2code",
+                   "searching-literature":  "https://github.com/wentorai/Research-Claw/tree/main/skills/searching-literature",
+                   "subagent-driven-review":  "https://github.com/wentorai/Research-Claw/tree/main/skills/subagent-driven-review",
+                   "huggingface-hub":  "https://github.com/NousResearch/hermes-agent/tree/main/skills/mlops/huggingface-hub"
+               }
+}

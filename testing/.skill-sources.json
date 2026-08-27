@@ -1,0 +1,7 @@
+{
+  "skills": {
+    "agent-dx-cli-scale": "https://github.com/google-labs-code/design.md/tree/main/.agents/skills/agent-dx-cli-scale",
+    "tdd": "https://github.com/google-labs-code/design.md/tree/main/.agents/skills/tdd",
+    "webapp-testing": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing"
+  }
+}

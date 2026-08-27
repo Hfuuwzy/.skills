@@ -1,0 +1,7 @@
+{
+  "skills": {
+    "content-research-writer": "https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/business-marketing/content-research-writer",
+    "doc-coauthoring": "https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring",
+    "neat-freak": "https://github.com/KKKKhazix/khazix-skills/tree/main/neat-freak"
+  }
+}

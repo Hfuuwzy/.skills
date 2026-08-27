@@ -1,0 +1,11 @@
+{
+  "skills": {
+    "banner-design": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/banner-design",
+    "brand": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/brand",
+    "design": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/design",
+    "design-system": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/design-system",
+    "slides": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/slides",
+    "ui-styling": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/ui-styling",
+    "ui-ux-pro-max": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/ui-ux-pro-max"
+  }
+}
