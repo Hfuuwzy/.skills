@@ -8,6 +8,7 @@ Multiple isolated browser sessions with state persistence and concurrent browsin
 
 - [Named Sessions](#named-sessions)
 - [Session Isolation Properties](#session-isolation-properties)
+- [Tab Pinning in a Shared Browser](#tab-pinning-in-a-shared-browser)
 - [Session State Persistence](#session-state-persistence)
 - [Common Patterns](#common-patterns)
 - [Default Session](#default-session)
@@ -47,6 +48,28 @@ Each session has independent:
 - Browsing history
 - Open tabs
 
+## Tab Pinning in a Shared Browser
+
+Full isolation applies when each session launches its own browser. When sessions instead share one Chrome over `--cdp <port>`, cookies and storage are shared, and only the tab selection separates the sessions. Add `--pin-tab` so each session sticks to its own tab:
+
+```bash
+agent-browser --session agent1 --cdp 9222 --pin-tab open https://site-a.com
+agent-browser --session agent2 --cdp 9222 --pin-tab open https://site-b.com
+```
+
+Every session remembers which tab it is bound to (by CDP target id, persisted in the session's state directory), so a restarted daemon reattaches to the session's own tab instead of adopting the most recently active one. `--pin-tab` (env `AGENT_BROWSER_PIN_TAB=1`) additionally makes the binding strict:
+
+- Attaching with no binding opens a fresh tab instead of adopting an existing one
+- If the bound tab is closed, commands fail with a `tab_gone` error instead of silently acting on another tab. JSON output includes `"code": "tab_gone"`, `data.targetId`, and optional `data.lastUrl`
+- Recovery commands still work in that state: run `tab new <url>` to bind a fresh tab, or `tab list` and switch to an existing one
+- Tabs opened by other sessions or the user never steal the pinned session's active tab
+
+The flag is sticky per session: pass it once at session creation and later commands and daemon restarts keep the strict semantics. Pass `--no-pin-tab` to explicitly turn the pin off again. Use each tab's `targetId` from `tab list --json` when one session needs to reference another session's tab; target ids stay stable across daemon restarts.
+
+The structured `lastUrl` is limited to sanitized HTTP(S) URLs and `about:blank`. Credentials, query strings, and fragments are removed from HTTP(S) URLs. Opaque URLs such as `data:` are omitted. In batch JSON, the recovery object appears under `result` instead of `data`.
+
+When re-running a shared-tab script such as the repro from #1530, add `--pin-tab` to the first command for every session. Without it, `open` intentionally preserves the legacy behavior and navigates the shared active tab, so the original script still collides. The same rule applies when sessions attach with `--auto-connect` instead of `--cdp`.
+
 ## Session State Persistence
 
 ### Automatic Restore
@@ -57,7 +80,7 @@ SESSION="$(agent-browser session id --scope worktree --prefix next-dev-loop)"
 agent-browser --session "$SESSION" --restore open https://app.example.com/dashboard
 ```
 
-State is loaded before navigation and saved on close, daemon shutdown, idle timeout, and compatible relaunch. It is also saved periodically while the browser is open (after commands settle, at most once per `AGENT_BROWSER_AUTOSAVE_INTERVAL_MS`, default 30000; set to `0` to save only on close), so a browser window the user closes by hand still leaves a recent save behind. Idle sessions keep saving on the same interval, capturing changes the page makes on its own such as token refreshes. The default save policy is `--restore-save auto`, which skips auto-save if restore failed or validation failed; `never` disables periodic autosave too.
+When `--restore` or another restore key is configured, state is loaded before navigation and saved on close, daemon shutdown, idle timeout, and compatible relaunch. It is also saved periodically while the browser is open (after commands settle, at most once per `AGENT_BROWSER_AUTOSAVE_INTERVAL_MS`, default 30000; set to `0` to save only on close), so a browser window the user closes by hand still leaves a recent save behind. A session ID by itself only isolates the daemon and does not enable persistence; without a restore key, shutdown discards transient browser state and open tabs. Idle sessions with configured persistence keep saving on the same interval, capturing changes the page makes on its own such as token refreshes. The daemon exits after one hour without commands or dashboard input by default; `--idle-timeout <time>` or `AGENT_BROWSER_IDLE_TIMEOUT_MS` tunes this, and `0` disables it. Headed, Safari/iOS WebDriver, and user-attached browsers are exempt from the default timeout; provider-owned cloud browsers are not. The default save policy is `--restore-save auto`, which skips auto-save if restore failed or validation failed; `never` disables periodic autosave too.
 
 ```bash
 agent-browser --session "$SESSION" --restore --restore-check-url "**/dashboard" open https://app.example.com/dashboard
