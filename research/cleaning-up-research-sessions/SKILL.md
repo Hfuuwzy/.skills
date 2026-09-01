@@ -5,6 +5,21 @@ when_to_use: After research session is complete and consolidated. When research 
 version: 1.0.0
 ---
 
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  本文件为开源 Skill 原始文档，收录仅供学习与研究参考        ║
+  ║  CoPaper.AI 收集整理 | https://copaper.ai                  ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  来源仓库: https://github.com/kthorn/research-superpower
+  项目名称: research-superpower
+  开源协议: MIT License
+  收录日期: 2026-04-02
+
+  声明: 本文件版权归原作者所有。此处收录旨在为社会科学实证研究者
+  提供 AI Agent Skills 的集中参考。如有侵权，请联系删除。
+-->
+
 # Cleaning Up Research Sessions
 
 ## Overview
