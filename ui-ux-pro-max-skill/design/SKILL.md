@@ -1,6 +1,6 @@
 ---
-name: ckm:design
-description: "Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55 styles, Gemini AI), corporate identity program (50 deliverables, CIP mockups), HTML presentations (Chart.js), banner design (22 styles, social/ads/web/print), icon design (15 styles, SVG, Gemini 3.1 Pro), social photos (HTML→screenshot, multi-platform). Actions: design logo, create CIP, generate mockups, build slides, design banner, generate icon, create social photos, social media images, brand identity, design system. Platforms: Facebook, Twitter, LinkedIn, YouTube, Instagram, Pinterest, TikTok, Threads, Google Ads."
+name: design
+description: "Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55 styles, Gemini or Atlas Cloud AI), corporate identity program (50 deliverables, CIP mockups), HTML presentations (Chart.js), banner design (22 styles, social/ads/web/print), icon design (15 styles, SVG, Gemini 3.1 Pro), social photos (HTML→screenshot, multi-platform). Actions: design logo, create CIP, generate mockups, build slides, design banner, generate icon, create social photos, social media images, brand identity, design system. Platforms: Facebook, Twitter, LinkedIn, YouTube, Instagram, Pinterest, TikTok, Threads, Google Ads."
 argument-hint: "[design-type] [context]"
 license: MIT
 metadata:
@@ -62,6 +62,7 @@ python3 ~/.claude/skills/design/scripts/logo/search.py "healthcare medical" --do
 ```bash
 python3 ~/.claude/skills/design/scripts/logo/generate.py --brand "TechFlow" --style minimalist --industry tech
 python3 ~/.claude/skills/design/scripts/logo/generate.py --prompt "coffee shop vintage badge" --style vintage
+python3 ~/.claude/skills/design/scripts/logo/generate.py --brand "TechFlow" --provider atlas
 ```
 
 **IMPORTANT:** When scripts fail, try to fix them directly.
@@ -289,12 +290,23 @@ Load `references/social-photos-design.md` for sizes, templates, best practices.
 | `scripts/cip/core.py` | BM25 search engine for CIP data |
 | `scripts/icon/generate.py` | Generate SVG icons with Gemini 3.1 Pro |
 
+## Prerequisites
+
+**Python:** This skill uses Python scripts. On Windows, use `python` instead of `python3` (e.g., `python scripts/logo/search.py` instead of `python3 scripts/logo/search.py`).
+
+Check if Python is installed:
+```bash
+python3 --version || python --version
+```
+
 ## Setup
 
 ```bash
 export GEMINI_API_KEY="your-key"  # https://aistudio.google.com/apikey
 pip install google-genai pillow
 ```
+
+> **Note for Windows:** Use `python` instead of `pip` where needed (e.g., `python -m pip install ...`).
 
 ## Integration
 

@@ -1,198 +1,108 @@
 ---
-name: Searching Scientific Literature
-description: PubMed search with keyword optimization, result parsing, and metadata extraction
-when_to_use: When starting literature search. When user asks about papers, publications, studies. When need to find scientific articles. When building initial paper list for research question.
-version: 1.0.0
+name: searching-literature
+description: Scopus relevance search (main) enriched with OpenAlex abstracts and OA links, via the rp_* tools pipeline
+when_to_use: When starting literature search. When user asks about papers, publications, studies. When building the initial candidate list for a research question.
+version: 2.0.0
 ---
 
 # Searching Scientific Literature
 
+> **RC native tools** — this skill's pipeline ships as four built-in RC tools. Call them directly; do **not** shell out to any `rp.py` script or write curl:
+> - `rp_search({ query, limit?, min_year? })` — Scopus relevance search enriched with OpenAlex abstracts + OA PDF links. The Elsevier key is built in.
+> - `rp_abstracts({ dois })` — batch abstracts + OA links for a DOI list (OpenAlex, no key).
+> - `rp_cite({ doi, direction?, limit? })` — citation traversal (`direction`: `both` / `backward` / `forward`).
+> - `rp_fulltext({ doi, out? })` — OA full text (Elsevier ScienceDirect OA → OpenAlex OA fallback); pass `out` to also save the text to a file.
+>
+> Results return inline as JSON (there is no `--json <file>` flag). To persist a result set, save the returned JSON with the workspace file tools.
+
+
 ## Overview
 
-Search PubMed for scientific literature using optimized queries. Extract metadata and prepare papers for relevance evaluation.
+Discovery runs on **one backbone: Scopus** (relevance-ranked, all-publisher coverage,
+real citation counts), with **OpenAlex** layered on only to supply the data Scopus's
+personal-key tier withholds (abstracts, OA full-text links). Both are driven by the
+`the rp_* tools` tool — you do not hand-write curl.
 
-**Core principle:** Cast a wide enough net to find relevant papers, but use targeted keywords to keep results manageable.
+**Core principle:** Scopus decides *what* and *in what order*; OpenAlex fills in *abstracts*.
 
-## When to Use
+> **Key entitlement reality (tested):** a personal Scopus API key exposes the STANDARD
+> search view only — title, DOI, EID, citation count, year, OA flag. It does **not**
+> return abstracts, references, or forward citations. That is why abstracts come from
+> OpenAlex and citation traversal lives in `traversing-citations` (also OpenAlex). Do
+> not try to pull abstracts/refs from Scopus; the calls 403.
 
-Use this skill when:
-- Starting a new research question
-- User asks "find papers about..."
-- Need initial paper set for evaluation
-- Searching for specific methods, compounds, diseases, techniques
+## How to Search
 
-## Search Strategy
+### 1. Build the Scopus query
 
-### 1. Parse User Query
+Scopus query syntax (richer than plain keywords — use it):
 
-Extract:
-- **Keywords**: Main concepts (e.g., "BTK inhibitor", "selectivity", "kinase")
-- **Data types**: What user needs (IC50 values, methods, structures, results)
-- **Constraints**: Date ranges, specific journals, author names
-- **Synonyms**: Alternative terms (e.g., "Bruton's tyrosine kinase" = "BTK")
+- `TITLE-ABS-KEY( ... )` — search title, abstract, keywords (the default workhorse)
+- `AND` / `OR` / `AND NOT` — boolean
+- `W/n` — proximity (e.g. `BTK W/3 selectivity`)
+- `PUBYEAR > 2018` — date constraint
+- `DOCTYPE(ar)` — article type (ar=article, re=review)
 
-### 2. Construct PubMed Query
-
-**Boolean operators:**
-- AND - narrow results (must have both terms)
-- OR - broaden results (either term)
-- NOT - exclude terms
-
-**Example queries:**
+Examples:
 ```
-"BTK inhibitor"[Title/Abstract] AND selectivity[Title/Abstract]
-
-("kinase inhibitor" OR "protein kinase") AND (selectivity OR "off-target")
-
-"ibrutinib"[Title/Abstract] AND ("IC50" OR "inhibitory concentration")
+TITLE-ABS-KEY(("BTK" OR "Bruton tyrosine kinase") AND inhibitor AND (selectivity OR "off-target"))
+TITLE-ABS-KEY("CRISPR" AND cardiomyocyte) AND PUBYEAR > 2019
 ```
 
-**Field tags:**
-- `[Title/Abstract]` - search title and abstract only
-- `[Title]` - title only (more precise)
-- `[Author]` - specific author
-- `[Journal]` - specific journal
-- `[Date]` - date range
+### 2. Run the search
 
-### 3. Execute Search
-
-**API endpoint:**
 ```bash
-https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?\
-db=pubmed&\
-term=YOUR_QUERY&\
-retmax=100&\
-retmode=json&\
-sort=relevance
+rp_search "TITLE-ABS-KEY(BTK inhibitor selectivity)" \
+    --limit 50 --min-year 2015
 ```
 
-**Parameters:**
-- `db=pubmed` - search PubMed database
-- `term=` - your query (URL encode spaces and special chars)
-- `retmax=100` - max results (start with 100)
-- `retmode=json` - return JSON
-- `sort=relevance` - most relevant first (or `pub_date` for newest)
+This single command:
+1. Pages Scopus by relevancy (citation counts included).
+2. Batch-fetches OpenAlex by DOI (50/call) to attach `abstract`, `oa_status`, `oa_pdf_url`.
+3. Writes candidate records ready for scoring.
 
-**Example bash:**
-```bash
-curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=BTK+inhibitor+selectivity&retmax=100&retmode=json&sort=relevance"
-```
-
-**Response format:**
+Each record:
 ```json
 {
-  "esearchresult": {
-    "count": "156",
-    "retmax": "100",
-    "idlist": ["12345678", "87654321", ...]
-  }
+  "scopus_id": "85...", "eid": "2-s2.0-85...", "doi": "10.1016/...",
+  "title": "...", "year": "2023", "cited_by": 42, "oa": true,
+  "source": "Journal of Medicinal Chemistry",
+  "abstract": "We report ...", "openalex_id": "W...",
+  "oa_status": "gold", "oa_pdf_url": "https://..."
 }
 ```
 
-### 4. Fetch Paper Metadata
+### 3. Report
 
-**API endpoint:**
-```bash
-https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?\
-db=pubmed&\
-id=12345678,87654321&\
-retmode=json
-```
+Announce: `🔎 Scopus: N papers · M with abstracts (OpenAlex)`.
+Then hand the candidate list to `evaluating-paper-relevance` for scoring.
 
-**Extract from response:**
-- Title
-- Authors (list)
-- Journal name
-- Publication date
-- Abstract (via separate efetch call or use esummary)
-- PMID
-- DOI (if available in `articleids`)
+## Coverage Notes (honest limits)
 
-**Getting DOI from PMID:**
-```json
-"articleids": [
-  {"idtype": "pubmed", "value": "12345678"},
-  {"idtype": "doi", "value": "10.1234/example.2023"}
-]
-```
-
-**If DOI missing:**
-- Use PMID as fallback identifier
-- Try to resolve DOI via PubMed Central or publisher APIs later
-
-## Output Format
-
-Create list of paper objects:
-
-```json
-[
-  {
-    "pmid": "12345678",
-    "doi": "10.1234/example.2023",
-    "title": "Selective BTK inhibitors for autoimmune diseases",
-    "authors": ["Smith J", "Doe A", "Johnson B"],
-    "journal": "Nature Chemical Biology",
-    "year": "2023",
-    "abstract": "We developed a series of...",
-    "source": "pubmed_search"
-  }
-]
-```
-
-## Error Handling
-
-**Rate limits (CRITICAL - shared across all processes/subagents):**
-- No API key: 3 requests/second (official limit)
-- With API key: 10 requests/second
-- **Single agent/script:** Use 500ms delays (2 req/sec, safe margin)
-  - 350ms is theoretically sufficient but causes ~20% HTTP 429 errors in practice
-- **Multiple parallel subagents:** Use longer delays to share capacity
-  - 2 parallel: 1 second each (2 total req/sec)
-  - 3 parallel: 1.5 seconds each (2 total req/sec)
-  - 5 parallel: 2.5 seconds each (2 total req/sec)
-  - Formula: `delay_seconds = (num_parallel / rate_limit) + safety_margin`
-- **If you get HTTP 429 errors:** Wait 5 seconds, resume with doubled delays
-
-**Empty results:**
-- Try broader terms
-- Remove field tags
-- Check for typos
-- Use OR to add synonyms
-
-**Too many results (>500):**
-- Add more specific terms
-- Use field tags to narrow
-- Add date constraints
-- Consider splitting into sub-queries
-
-## Integration with Other Skills
-
-After search completes:
-1. **Save results** to research folder as `initial-search-results.json`
-2. **For each paper**, call `evaluating-paper-relevance` skill
-3. **Track in** `papers-reviewed.json` (use DOI as key, fallback to PMID)
+- **Abstract gaps:** OpenAlex lacks abstracts for some closed papers (notably parts of
+  Elsevier/ACS). Expect roughly 50–80% abstract coverage. Papers with `"abstract": ""`
+  must be scored from **title + journal + citation count** only, or deferred — never
+  silently dropped. Flag them: `⚠️ No abstract (score from title)`.
+- **Scopus quota:** 20,000 search results/week on the personal key. The pipeline paginates
+  25/call, so a 50-result search costs 2 calls. Budget accordingly for large sweeps.
+- **No Scopus abstracts/refs/fulltext-search** on this key — by design, see above.
 
 ## Quick Reference
 
 | Task | Command |
 |------|---------|
-| Search PubMed | `curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=QUERY&retmax=100&retmode=json"` |
-| Get metadata | `curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=PMID1,PMID2&retmode=json"` |
-| URL encode query | Replace spaces with `+`, special chars with `%XX` |
-| Narrow results | Use AND, add field tags, more specific terms |
-| Broaden results | Use OR, remove field tags, add synonyms |
+| Search + enrich | `rp_search "<scopus query>" --limit N` |
+| Narrow | add `AND`, `PUBYEAR > Y`, `DOCTYPE(ar)`, more specific `TITLE-ABS-KEY` |
+| Broaden | use `OR`, drop constraints, add synonyms |
 
 ## Common Mistakes
 
-**Too narrow:** Only 5 results → Use OR, remove constraints
-**Too broad:** 5000 results → Add AND terms, use field tags
-**Missing abstracts:** Use efetch instead of esummary for full abstract text
-**DOI not found:** Many older papers lack DOI - use PMID as fallback
-**Rate limiting:** Add 500ms delays (single agent) or longer (parallel subagents sharing rate limit)
+- **Hand-writing curl to Scopus** → use `the rp_* tools`; it handles paging, rate limits, caching.
+- **Expecting abstracts from Scopus** → they come from OpenAlex; some will be missing.
+- **Dropping abstract-less papers** → score them from title/citations or defer, don't hide them.
+- **Ignoring the weekly quota** → 20k Scopus results/week; don't burn it on over-broad sweeps.
 
 ## Next Steps
 
-After completing search:
-- Announce: "Found N papers matching query"
-- Begin evaluation using `skills/research/evaluating-paper-relevance`
-- Update user with progress as papers are screened
+After search: score with `evaluating-paper-relevance`; expand high scorers with
+`traversing-citations`.
