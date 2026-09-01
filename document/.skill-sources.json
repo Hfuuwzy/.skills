@@ -1,12 +1,12 @@
-{
-  "skills": {
-    "docx": "https://github.com/anthropics/skills/tree/main/skills/docx",
-    "json-canvas": "https://github.com/kepano/obsidian-skills/tree/main/skills/json-canvas",
-    "obsidian-bases": "https://github.com/kepano/obsidian-skills/tree/main/skills/obsidian-bases",
-    "obsidian-markdown": "https://github.com/kepano/obsidian-skills/tree/main/skills/obsidian-markdown",
-    "pdf": "https://github.com/NousResearch/hermes-agent/tree/main/skills/productivity/pdf",
-    "pptx": "https://github.com/anthropics/skills/tree/main/skills/pptx",
-    "pptx-html-fidelity-audit": "https://github.com/nexu-io/open-design/tree/main/plugins/_official/examples/pptx-html-fidelity-audit",
-    "xlsx": "https://github.com/anthropics/skills/tree/main/skills/xlsx"
-  }
+﻿{
+    "skills":  {
+                   "pptx":  "https://github.com/anthropics/skills/tree/main/skills/pptx",
+                   "pptx-html-fidelity-audit":  "https://github.com/nexu-io/open-design/tree/main/plugins/_official/examples/pptx-html-fidelity-audit",
+                   "json-canvas":  "https://github.com/kepano/obsidian-skills/tree/main/skills/json-canvas",
+                   "docx":  "https://github.com/NousResearch/hermes-agent/tree/main/skills/productivity/docx",
+                   "obsidian-markdown":  "https://github.com/kepano/obsidian-skills/tree/main/skills/obsidian-markdown",
+                   "xlsx":  "https://github.com/anthropics/skills/tree/main/skills/xlsx",
+                   "pdf":  "https://github.com/NousResearch/hermes-agent/tree/main/skills/productivity/pdf",
+                   "obsidian-bases":  "https://github.com/kepano/obsidian-skills/tree/main/skills/obsidian-bases"
+               }
 }
