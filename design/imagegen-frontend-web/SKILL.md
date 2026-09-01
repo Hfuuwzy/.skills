@@ -1,32 +1,7 @@
 ---
 name: imagegen-frontend-web
-description: |
-  Elite frontend image-direction skill for generating premium, conversion-aware website design references. CRITICAL OUTPUT RULE — generate ONE separate horizontal image FOR EVERY section. A landing page with 8 sections produces 8 images. Never compress multiple sections into one image. Enforces composition variety (not always left-text / right-image), background-image freedom, varied CTAs, varied hero scales (giant / mid / mini minimalist), narrative concept spine, second-read moments, and a single consistent palette across all images. Optimized for landing pages, marketing sites, and product comps that developers or coding models can accurately recreate.
-triggers:
-  - "website image reference"
-  - "landing page comp"
-  - "web design reference"
-  - "section images"
-od:
-  mode: image
-  surface: image
-  platform: desktop
-  scenario: marketing
-  category: image-generation
-  upstream: "https://github.com/Leonxlnx/taste-skill"
-  preview:
-    type: markdown
-  design_system:
-    requires: true
-  craft:
-    requires:
-      - typography
-      - color
-      - anti-ai-slop
-  example_prompt: |
-    Generate separate premium website reference images for each landing-page section, keeping one coherent palette and varied composition.
+description: Elite frontend image-direction skill for generating premium, conversion-aware website design references. CRITICAL OUTPUT RULE — generate ONE separate horizontal image FOR EVERY section. A landing page with 8 sections produces 8 images. Never compress multiple sections into one image. Enforces composition variety (not always left-text / right-image), background-image freedom, varied CTAs, varied hero scales (giant / mid / mini minimalist), narrative concept spine, second-read moments, and a single consistent palette across all images. Optimized for landing pages, marketing sites, and product comps that developers or coding models can accurately recreate.
 ---
-
 
 # HARD OUTPUT RULE — READ FIRST
 
